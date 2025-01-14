@@ -1,52 +1,57 @@
 import { createContext, useState, useEffect, useContext } from "react";
-import { onAuthStateChanged, signInWithPopup, signOut } from "firebase/auth";
+import {
+  onAuthStateChanged,
+  signInWithRedirect,
+  signInWithPopup,
+  signOut,
+} from "firebase/auth";
 import { auth, googleProvider } from "../firebase";
 
-// Create the Auth Context
+//create context
 const AuthContext = createContext();
-
-// AuthProvider Component
+//provider context
 export const AuthProvider = ({ children }) => {
-  const [currentUser, setCurrentUser] = useState(null);
+  const [currentUser, setCurrentUSer] = useState("");
   const [loading, setLoading] = useState(true);
 
-  // Sign in with Google (Popup)
+  //   signin with google
   const signInWithGoogle = async () => {
     try {
-      const result = await signInWithPopup(auth, googleProvider);
-      //   setCurrentUser(result.user);
-      //   console.log("User signed in:", result.user);
+      await signInWithRedirect(auth, googleProvider);
+      //   const result = await signInWithPopup(auth, googleProvider);
+      //   const user = result.user;
+      //   console.log(user);
     } catch (error) {
       console.error("Error signing in with Google:", error);
     }
   };
 
-  // Sign out
+  // signout from google
   const logout = async () => {
     try {
       await signOut(auth);
-      setCurrentUser(null);
     } catch (error) {
       console.error("Error signing out:", error);
     }
   };
 
-  // Track authentication state changes
+  const value = {
+    currentUser,
+    setCurrentUSer,
+    signInWithGoogle,
+    logout,
+  };
+
+  // set currentUser
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (user) => {
-      console.log("onAuthStateChanged", user);
-      setCurrentUser(user);
+      console.log(user);
+
+      setCurrentUSer(user);
       setLoading(false);
     });
     return unsubscribe;
   }, []);
-
-  const value = {
-    currentUser,
-    setCurrentUser,
-    signInWithGoogle,
-    logout,
-  };
 
   return (
     <AuthContext.Provider value={value}>
@@ -55,7 +60,6 @@ export const AuthProvider = ({ children }) => {
   );
 };
 
-// Custom hook to use Auth Context
 export const UserAuth = () => {
   return useContext(AuthContext);
 };

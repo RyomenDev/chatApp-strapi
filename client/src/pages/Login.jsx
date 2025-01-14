@@ -9,7 +9,7 @@ const Login = () => {
   const [displayName, setDisplayName] = useState("");
   const [uid, setUid] = useState("");
   const [email, setEmail] = useState("");
-  
+
   const handleLogin = async () => {
     try {
       await signInWithGoogle();
@@ -24,6 +24,8 @@ const Login = () => {
         try {
           // Destructure currentUser to get necessary details
           const { displayName, uid, email } = currentUser;
+          console.log(displayName, uid, email);
+          
           // Update state with the user details
           setDisplayName(displayName);
           setUid(uid);
