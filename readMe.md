@@ -1,6 +1,9 @@
 
 # Chat App with React and Strapi
 
+![Chat App](https://api-prod.strapi.io/uploads/008_project_demo_7181661045.gif)
+
+
 This is a simple chat application built using **React** for the front-end and **Strapi** as the back-end. The app allows users to sign in with Google, send and receive messages, and view user avatars.
 
 ## Features
