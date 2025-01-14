@@ -24,8 +24,8 @@ const Login = () => {
         try {
           // Destructure currentUser to get necessary details
           const { displayName, uid, email } = currentUser;
-          console.log(displayName, uid, email);
-          
+          //   console.log(displayName, uid, email);
+
           // Update state with the user details
           setDisplayName(displayName);
           setUid(uid);
