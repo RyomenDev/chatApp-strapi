@@ -2,6 +2,7 @@ import conf from "../conf/conf";
 import { useEffect, useState } from "react";
 import { UserAuth } from "../context/AuthContext";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
 
 const Login = () => {
   const navigate = useNavigate();
@@ -14,58 +15,50 @@ const Login = () => {
     try {
       await signInWithGoogle();
     } catch (error) {
-      console.log("Error signing in:", error);
+      console.error("Error signing in:", error);
     }
   };
+
   useEffect(() => {
     // Check if currentUser exists
     if (currentUser) {
       const fetchUserData = async () => {
         try {
-          // Destructure currentUser to get necessary details
           const { displayName, uid, email } = currentUser;
-          //   console.log(displayName, uid, email);
 
-          // Update state with the user details
+          // Update state with user details
           setDisplayName(displayName);
           setUid(uid);
           setEmail(email);
-          // Send user details to Strapi API
-          await fetch(`${conf.SERVER_API_URL}/accounts`, {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
+
+          // Send user details to Strapi API using Axios
+          const response = await axios.post(`${conf.SERVER_API_URL}/accounts`, {
+            data: {
+              uid: uid,
+              Username: displayName,
+              Email: email,
             },
-            body: JSON.stringify({
-              data: {
-                uid: uid,
-                Username: displayName,
-                Email: email,
-              },
-            }),
-          })
-            .then((response) => response.json())
-            .then((data) => {
-              console.log("Data from Strapi API:", data);
-              // navigate to another page after sending data
-              navigate("/Chat");
-            })
-            .catch((error) => {
-              console.log("Error sending user data to Strapi API:", error);
-            });
+          });
+
+          //   console.log("Data from Strapi API:", response.data);
+
+          // Navigate to another page after sending data
+          navigate("/Chat");
         } catch (error) {
-          console.log("Error setting user data:", error);
+          console.error("Error sending user data to Strapi API:", error);
         }
       };
+
       // Call fetchUserData function
       fetchUserData();
     }
-  }, [currentUser, navigate]); // Include currentUser and navigate in the dependency array
+  }, [currentUser, navigate]);
+
   return (
     <div className="hero min-h-screen bg-base-200">
       <div className="hero-content text-center">
         <div className="max-w-md">
-          <h1 className="text-5xl font-bold">Welcome to Strapi ChatRomm</h1>
+          <h1 className="text-5xl font-bold">Welcome to Strapi ChatRoom</h1>
           <p className="py-6">
             Join the conversation, meet new people, and make connections in one
             shared room.
@@ -78,4 +71,5 @@ const Login = () => {
     </div>
   );
 };
+
 export default Login;
