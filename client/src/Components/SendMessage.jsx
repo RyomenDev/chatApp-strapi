@@ -1,5 +1,8 @@
-import React, { useState } from "react";
+
+import conf from "../conf/conf";
+import { useState } from "react";
 import { UserAuth } from "../context/AuthContext";
+
 const SendMessage = () => {
   const [value, setValue] = useState("");
   const { currentUser } = UserAuth();
@@ -15,7 +18,7 @@ const SendMessage = () => {
     try {
       const { displayName, photoURL } = currentUser;
       if (currentUser) {
-        fetch("http://localhost:1337/api/chat-room-messages", {
+        fetch(`${conf.SERVER_API_URL}/chat-room-messages`, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",

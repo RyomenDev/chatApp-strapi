@@ -1,6 +1,7 @@
-import React from "react";
+import conf from "../conf/conf"
 import Message from "./Message";
 import { useState, useRef, useEffect } from "react";
+
 const ChatBox = () => {
   const messagesEndRef = useRef();
   const [messages, setMessages] = useState([]);
@@ -10,7 +11,7 @@ const ChatBox = () => {
   useEffect(scrollToBottom, [messages]);
   useEffect(() => {
     const interval = setInterval(() => {
-      fetch("http://localhost:1337/api/chat-room-messages", {
+      fetch(`${conf.SERVER_API_URL}/chat-room-messages`, {
         method: "GET",
         headers: {
           "Content-Type": "application/json",

@@ -1,4 +1,4 @@
-import React from "react";
+
 import { UserAuth } from "../context/AuthContext";
 
 const Nav = () => {

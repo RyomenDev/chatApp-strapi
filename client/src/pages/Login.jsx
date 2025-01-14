@@ -1,12 +1,15 @@
-import React, { useEffect, useState } from "react";
+import conf from "../conf/conf";
+import { useEffect, useState } from "react";
 import { UserAuth } from "../context/AuthContext";
 import { useNavigate } from "react-router-dom";
+
 const Login = () => {
   const navigate = useNavigate();
   const { currentUser, signInWithGoogle } = UserAuth();
   const [displayName, setDisplayName] = useState("");
   const [uid, setUid] = useState("");
   const [email, setEmail] = useState("");
+  
   const handleLogin = async () => {
     try {
       await signInWithGoogle();
@@ -26,7 +29,7 @@ const Login = () => {
           setUid(uid);
           setEmail(email);
           // Send user details to Strapi API
-          await fetch("http://localhost:1337/api/accounts", {
+          await fetch(`${conf.SERVER_API_URL}/accounts`, {
             method: "POST",
             headers: {
               "Content-Type": "application/json",

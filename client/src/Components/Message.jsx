@@ -1,5 +1,6 @@
-import React from "react";
+
 import { UserAuth } from "../context/AuthContext";
+
 const Message = ({ message }) => {
   const { currentUser } = UserAuth();
   return (
